@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"/>
+        <link rel="stylesheet" href="styles.css"/>
+    </head>
+    <body>
+        <h1>PITCH Peptide Generator</h1>
+        <label for="input">Paste FASTA sequences here:</label>
+        <textarea id="input" placeholder="e.g. &quot;MFVFLVLLPLVSSQCVNLTT...&quot;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+        <label for="peptide-length">Peptide length</label>
+        <input id="peptide-length" type="number" min="1" value="18" step="1"/>
+        <label for="overlap">Overlap</label>
+        <input id="overlap" type="number" min="0" max="17" value="10" step="1"/>
+        <div id="outputs">
+            <div class="placeholder">Peptide sequence lists will appear here...</div>
+        </div>
+    </body>
+    <script src="bundle.js"></script>
+</html>
