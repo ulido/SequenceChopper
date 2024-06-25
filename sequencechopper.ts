@@ -45,9 +45,9 @@ export class SequenceChopper implements Iterable<string> {
     // Verifty that the given AA sequence is valid.
     private verifySequence() {
         // Check that the given sequence is at least one peptide long
-        if (this.sequence.length < this.peptideLength) {
-            throw new Error('Sequence length is smaller than the specified peptide length!');
-        }
+        // if (this.sequence.length < this.peptideLength) {
+        //     throw new Error('Sequence length is smaller than the specified peptide length!');
+        // }
         // Check that the given sequence only contains allowed amino acids
         const aaRe = /[ACDEFGHIKLMNPQRSTVWYXBZJ]+/
         if (!aaRe.test(this.sequence)) {
@@ -68,7 +68,9 @@ export class SequenceChopper implements Iterable<string> {
         // The end of the new peptide needs to be the given peptide length beyond the start, but cannot be beyond the end of the sequence.
         const end = Math.min(start + this.peptideLength, this.sequence.length);
         // Check if the length of the proposed peptide is smaller than the given peptide length (because we're at the end of the sequence).
+        let at_end = false;
         if (end - start < this.peptideLength) {
+            at_end = true;
             // Shift the start to the left (creating more overlap).
             start = end - this.peptideLength;
             // Check If the start is now to the left of the sequence start (this should never happen!)
@@ -77,11 +79,15 @@ export class SequenceChopper implements Iterable<string> {
             }
         }
         // Retrieve candidate sequence
-        let candidate = this.sequence.slice(start, end);
+        let candidate = this.sequence.slice(start, end).replace(this.disallowedEndsRE, '');
+        let new_position = Math.min(start + candidate.length, this.sequence.length);
+        if (at_end) {
+            new_position = this.sequence.length
+        }
         // Remove disallowed AAs from the end and return the new peptide
         return {
-            position: end,
-            peptide: candidate.replace(this.disallowedEndsRE, ''),
+            position: new_position,
+            peptide: candidate,
         };
     }
 
